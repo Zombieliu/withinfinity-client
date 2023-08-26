@@ -4875,8 +4875,8 @@ System.register("chunks:///_virtual/CCVMParentComp.ts", ['./rollupPluginModLoBab
   };
 });
 
-System.register("chunks:///_virtual/claim_pet.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _inheritsLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Component;
+System.register("chunks:///_virtual/claim.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './Oops.ts', './GameUIConfig.ts'], function (exports) {
+  var _inheritsLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Component, oops, UIID;
 
   return {
     setters: [function (module) {
@@ -4887,139 +4887,10 @@ System.register("chunks:///_virtual/claim_pet.ts", ['./rollupPluginModLoBabelHel
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
       Component = module.Component;
-    }],
-    execute: function () {
-      var _dec, _class;
-
-      cclegacy._RF.push({}, "cdad6Y823dE14JCxcGtGcq1", "claim_pet", undefined);
-
-      var ccclass = _decorator.ccclass,
-          property = _decorator.property;
-      var claim = exports('claim', (_dec = ccclass('claim'), _dec(_class = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(claim, _Component);
-
-        function claim() {
-          return _Component.apply(this, arguments) || this;
-        }
-
-        var _proto = claim.prototype;
-
-        _proto.start = /*#__PURE__*/function () {
-          var _start = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-            return _regeneratorRuntime().wrap(function _callee$(_context) {
-              while (1) switch (_context.prev = _context.next) {
-                case 0:
-                case "end":
-                  return _context.stop();
-              }
-            }, _callee);
-          }));
-
-          function start() {
-            return _start.apply(this, arguments);
-          }
-
-          return start;
-        }();
-
-        _proto.formatData = function formatData(data) {
-          var formattedData = [];
-          data.forEach(function (_ref) {
-            var values = _ref[0],
-                format = _ref[1];
-            var formattedValue;
-
-            if (format === '0x1::string::String') {
-              formattedValue = values.map(function (num) {
-                return String.fromCharCode(num);
-              }).join('');
-            } else if (format === 'bool') {
-              formattedValue = values[0] !== 0 ? 'true' : 'false';
-            } else if (format === 'u64') {
-              var u64Value = new DataView(new ArrayBuffer(8));
-              values.forEach(function (num, index) {
-                return u64Value.setUint8(index, num);
-              });
-              formattedValue = u64Value.getBigUint64(0).toString();
-            } else {
-              formattedValue = 'Unknown Format';
-            }
-
-            formattedData.push(formattedValue);
-          });
-          return formattedData.join('\n');
-        };
-
-        _proto.get_metadata = /*#__PURE__*/function () {
-          var _get_metadata = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-            var obelisk, network, packageId, metadata, obelisk_sdk, tx, params, res1, input, formattedOutput;
-            return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-              while (1) switch (_context2.prev = _context2.next) {
-                case 0:
-                  // @ts-ignore
-                  obelisk = window.obelisk;
-                  network = 'testnet';
-                  packageId = '0x6afbf113a5872b781a2a0068b95c0d9d0ee89428518fdd65f862c841eab45b82';
-                  _context2.next = 5;
-                  return obelisk.getMetadata(network, packageId);
-
-                case 5:
-                  metadata = _context2.sent;
-                  obelisk_sdk = new obelisk.Obelisk({
-                    networkType: network,
-                    packageId: packageId,
-                    metadata: metadata // secretKey: privkey
-
-                  });
-                  console.log(obelisk_sdk);
-                  tx = new obelisk.TransactionBlock();
-                  params = [tx.pure('0x6fa43c68221960f942572905f3c198a5bccaa0700506b3b6bd83dd9b007e6324'), tx.pure('0xbf64721f0961a0426ccde6b8d9343e2cb2c26a105a5c33e57074580fd98b2cb1'), tx.pure('0x6')];
-                  _context2.next = 12;
-                  return obelisk_sdk.query.pet_system.get_pet_basic_info(tx, params);
-
-                case 12:
-                  res1 = _context2.sent;
-                  input = res1.results[0].returnValues;
-                  formattedOutput = this.formatData(input);
-                  console.log(formattedOutput);
-                // director.loadScene('home');
-
-                case 16:
-                case "end":
-                  return _context2.stop();
-              }
-            }, _callee2, this);
-          }));
-
-          function get_metadata() {
-            return _get_metadata.apply(this, arguments);
-          }
-
-          return get_metadata;
-        }();
-
-        _proto.update = function update(deltaTime) {};
-
-        return claim;
-      }(Component)) || _class));
-
-      cclegacy._RF.pop();
-    }
-  };
-});
-
-System.register("chunks:///_virtual/claim.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _inheritsLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Component;
-
-  return {
-    setters: [function (module) {
-      _inheritsLoose = module.inheritsLoose;
-      _asyncToGenerator = module.asyncToGenerator;
-      _regeneratorRuntime = module.regeneratorRuntime;
     }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      Component = module.Component;
+      oops = module.oops;
+    }, function (module) {
+      UIID = module.UIID;
     }],
     execute: function () {
       var _dec, _class;
@@ -5115,9 +4986,10 @@ System.register("chunks:///_virtual/claim.ts", ['./rollupPluginModLoBabelHelpers
                   input = res1.results[0].returnValues;
                   formattedOutput = this.formatData(input);
                   console.log(formattedOutput);
-                // director.loadScene('home');
+                  oops.gui.open(UIID.Home);
+                  oops.gui.remove(UIID.Claim);
 
-                case 16:
+                case 19:
                 case "end":
                   return _context2.stop();
               }
@@ -9589,6 +9461,7 @@ System.register("chunks:///_virtual/GameUIConfig.ts", ['cc', './LayerManager.ts'
         UIID[UIID["Netinstable"] = 3] = "Netinstable";
         UIID[UIID["Login"] = 4] = "Login";
         UIID[UIID["Claim"] = 5] = "Claim";
+        UIID[UIID["Home"] = 6] = "Home";
         return UIID;
       }({}));
       /** 打开界面方式的配置数据 */
@@ -9608,6 +9481,9 @@ System.register("chunks:///_virtual/GameUIConfig.ts", ['cc', './LayerManager.ts'
       }, _UIConfigData[UIID.Claim] = {
         layer: LayerType.UI,
         prefab: "gui/claim/claim"
+      }, _UIConfigData[UIID.Home] = {
+        layer: LayerType.UI,
+        prefab: "gui/home/home"
       }, _UIConfigData));
 
       cclegacy._RF.pop();
@@ -9790,8 +9666,8 @@ System.register("chunks:///_virtual/home.ts", ['./rollupPluginModLoBabelHelpers.
           return start;
         }();
 
-        _proto.update = /*#__PURE__*/function () {
-          var _update = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(deltaTime) {
+        _proto.go_home = /*#__PURE__*/function () {
+          var _go_home = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
             return _regeneratorRuntime().wrap(function _callee2$(_context2) {
               while (1) switch (_context2.prev = _context2.next) {
                 case 0:
@@ -9799,6 +9675,24 @@ System.register("chunks:///_virtual/home.ts", ['./rollupPluginModLoBabelHelpers.
                   return _context2.stop();
               }
             }, _callee2);
+          }));
+
+          function go_home() {
+            return _go_home.apply(this, arguments);
+          }
+
+          return go_home;
+        }();
+
+        _proto.update = /*#__PURE__*/function () {
+          var _update = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(deltaTime) {
+            return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+              while (1) switch (_context3.prev = _context3.next) {
+                case 0:
+                case "end":
+                  return _context3.stop();
+              }
+            }, _callee3);
           }));
 
           function update(_x) {
@@ -13853,9 +13747,9 @@ System.register("chunks:///_virtual/Logger.ts", ['cc'], function (exports) {
   };
 });
 
-System.register("chunks:///_virtual/main", ['./debug-view-runtime-control.ts', './Main.ts', './claim.ts', './claim_pet.ts', './home.ts', './sui.ts', './SingletonModuleComp.ts', './GameEvent.ts', './GameUIConfig.ts', './TablePromptWindow.ts', './Initialize.ts', './InitRes.ts', './LoadingViewComp.ts', './Oops.ts', './Root.ts', './AudioEffect.ts', './AudioManager.ts', './AudioMusic.ts', './EventDispatcher.ts', './EventMessage.ts', './MessageManager.ts', './ResLoader.ts', './Logger.ts', './RandomManager.ts', './StorageManager.ts', './Timer.ts', './TimerManager.ts', './GameCollision.ts', './GameComponent.ts', './GameManager.ts', './GUI.ts', './Defines.ts', './DelegateComponent.ts', './LayerDialog.ts', './LayerManager.ts', './LayerNotify.ts', './LayerPopup.ts', './LayerUI.ts', './UIMap.ts', './CommonPrompt.ts', './LoadingIndicator.ts', './Notify.ts', './ArrayUtil.ts', './CameraUtil.ts', './EncryptUtil.ts', './ImageUtil.ts', './JsonUtil.ts', './LayerUtil.ts', './MathUtil.ts', './ObjectUtil.ts', './PhysicsUtil.ts', './PlatformUtil.ts', './RegexUtil.ts', './RotateUtil.ts', './StringUtil.ts', './Vec3Util.ts', './ViewUtil.ts', './Ambilight.ts', './FlashSpine.ts', './FlashSprite.ts', './SpineFinishedRelease.ts', './NavLine.ts', './DrawMeshSector.ts', './Effect2DFollow3D.ts', './EffectDelayRelease.ts', './EffectEvent.ts', './EffectFinishedRelease.ts', './EffectSingleCase.ts', './MoveRigidBody.ts', './MoveTo.ts', './MoveTranslate.ts', './AnimatorAnimation.ts', './AnimatorCustomization.ts', './AnimatorDragonBones.ts', './AnimatorSkeletal.ts', './AnimatorSpine.ts', './AnimatorSpineSecondary.ts', './AnimatorBase.ts', './AnimatorCondition.ts', './AnimatorController.ts', './AnimatorParams.ts', './AnimatorState.ts', './AnimatorStateLogic.ts', './AnimatorTransition.ts', './BTreeNode.ts', './BehaviorTree.ts', './BranchNode.ts', './Decorator.ts', './IControl.ts', './Priority.ts', './Selector.ts', './Sequence.ts', './Task.ts', './index.ts', './FreeFlightCamera.ts', './OrbitCamera.ts', './AsyncQueue.ts', './Collection.ts', './ECS.ts', './ECSComp.ts', './ECSEntity.ts', './ECSGroup.ts', './ECSMask.ts', './ECSMatcher.ts', './ECSModel.ts', './ECSSystem.ts', './Badge.ts', './RoundRectMask.ts', './ButtonEffect.ts', './ButtonSimple.ts', './ButtonTouchLong.ts', './LabelChange.ts', './LabelNumber.ts', './LabelTime.ts', './Language.ts', './LanguageData.ts', './LanguageLabel.ts', './LanguagePack.ts', './LanguageSpine.ts', './LanguageSprite.ts', './JsonOb.ts', './StringFormat.ts', './VMBase.ts', './VMCompsEdit.ts', './VMCustom.ts', './VMEnv.ts', './VMEvent.ts', './VMLabel.ts', './VMModify.ts', './VMParent.ts', './VMProgress.ts', './VMState.ts', './ViewModel.ts', './BhvButtonGroup.ts', './BhvFrameIndex.ts', './BhvRollNumber.ts', './BhvSwitchPage.ts', './HttpRequest.ts', './NetInterface.ts', './NetManager.ts', './NetNode.ts', './NetProtocolPako.ts', './NetProtocolProtobuf.ts', './WebSock.ts', './RtToModel.ts', './RtToSprite.ts', './CCComp.ts', './CCVMParentComp.ts', './BuildTimeConstants.ts', './Config.ts', './GameConfig.ts', './GameQueryConfig.ts'], function () {
+System.register("chunks:///_virtual/main", ['./debug-view-runtime-control.ts', './Main.ts', './claim.ts', './home.ts', './sui.ts', './SingletonModuleComp.ts', './GameEvent.ts', './GameUIConfig.ts', './TablePromptWindow.ts', './Initialize.ts', './InitRes.ts', './LoadingViewComp.ts', './Oops.ts', './Root.ts', './AudioEffect.ts', './AudioManager.ts', './AudioMusic.ts', './EventDispatcher.ts', './EventMessage.ts', './MessageManager.ts', './ResLoader.ts', './Logger.ts', './RandomManager.ts', './StorageManager.ts', './Timer.ts', './TimerManager.ts', './GameCollision.ts', './GameComponent.ts', './GameManager.ts', './GUI.ts', './Defines.ts', './DelegateComponent.ts', './LayerDialog.ts', './LayerManager.ts', './LayerNotify.ts', './LayerPopup.ts', './LayerUI.ts', './UIMap.ts', './CommonPrompt.ts', './LoadingIndicator.ts', './Notify.ts', './ArrayUtil.ts', './CameraUtil.ts', './EncryptUtil.ts', './ImageUtil.ts', './JsonUtil.ts', './LayerUtil.ts', './MathUtil.ts', './ObjectUtil.ts', './PhysicsUtil.ts', './PlatformUtil.ts', './RegexUtil.ts', './RotateUtil.ts', './StringUtil.ts', './Vec3Util.ts', './ViewUtil.ts', './Ambilight.ts', './FlashSpine.ts', './FlashSprite.ts', './SpineFinishedRelease.ts', './NavLine.ts', './DrawMeshSector.ts', './Effect2DFollow3D.ts', './EffectDelayRelease.ts', './EffectEvent.ts', './EffectFinishedRelease.ts', './EffectSingleCase.ts', './MoveRigidBody.ts', './MoveTo.ts', './MoveTranslate.ts', './AnimatorAnimation.ts', './AnimatorCustomization.ts', './AnimatorDragonBones.ts', './AnimatorSkeletal.ts', './AnimatorSpine.ts', './AnimatorSpineSecondary.ts', './AnimatorBase.ts', './AnimatorCondition.ts', './AnimatorController.ts', './AnimatorParams.ts', './AnimatorState.ts', './AnimatorStateLogic.ts', './AnimatorTransition.ts', './BTreeNode.ts', './BehaviorTree.ts', './BranchNode.ts', './Decorator.ts', './IControl.ts', './Priority.ts', './Selector.ts', './Sequence.ts', './Task.ts', './index.ts', './FreeFlightCamera.ts', './OrbitCamera.ts', './AsyncQueue.ts', './Collection.ts', './ECS.ts', './ECSComp.ts', './ECSEntity.ts', './ECSGroup.ts', './ECSMask.ts', './ECSMatcher.ts', './ECSModel.ts', './ECSSystem.ts', './Badge.ts', './RoundRectMask.ts', './ButtonEffect.ts', './ButtonSimple.ts', './ButtonTouchLong.ts', './LabelChange.ts', './LabelNumber.ts', './LabelTime.ts', './Language.ts', './LanguageData.ts', './LanguageLabel.ts', './LanguagePack.ts', './LanguageSpine.ts', './LanguageSprite.ts', './JsonOb.ts', './StringFormat.ts', './VMBase.ts', './VMCompsEdit.ts', './VMCustom.ts', './VMEnv.ts', './VMEvent.ts', './VMLabel.ts', './VMModify.ts', './VMParent.ts', './VMProgress.ts', './VMState.ts', './ViewModel.ts', './BhvButtonGroup.ts', './BhvFrameIndex.ts', './BhvRollNumber.ts', './BhvSwitchPage.ts', './HttpRequest.ts', './NetInterface.ts', './NetManager.ts', './NetNode.ts', './NetProtocolPako.ts', './NetProtocolProtobuf.ts', './WebSock.ts', './RtToModel.ts', './RtToSprite.ts', './CCComp.ts', './CCVMParentComp.ts', './BuildTimeConstants.ts', './Config.ts', './GameConfig.ts', './GameQueryConfig.ts'], function () {
   return {
-    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
     execute: function () {}
   };
 });
