@@ -4876,7 +4876,7 @@ System.register("chunks:///_virtual/CCVMParentComp.ts", ['./rollupPluginModLoBab
 });
 
 System.register("chunks:///_virtual/claim.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './Oops.ts', './GameUIConfig.ts'], function (exports) {
-  var _inheritsLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Component, oops, UIID;
+  var _inheritsLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Component, sys, oops, UIID;
 
   return {
     setters: [function (module) {
@@ -4887,6 +4887,7 @@ System.register("chunks:///_virtual/claim.ts", ['./rollupPluginModLoBabelHelpers
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
       Component = module.Component;
+      sys = module.sys;
     }, function (module) {
       oops = module.oops;
     }, function (module) {
@@ -4895,7 +4896,7 @@ System.register("chunks:///_virtual/claim.ts", ['./rollupPluginModLoBabelHelpers
     execute: function () {
       var _dec, _class;
 
-      cclegacy._RF.push({}, "f9dc3SoyepDy71WdMFLdwOh", "claim", undefined);
+      cclegacy._RF.push({}, "324desxHSpCMpmrwSeSVxjs", "claim", undefined);
 
       var ccclass = _decorator.ccclass,
           property = _decorator.property;
@@ -4954,21 +4955,146 @@ System.register("chunks:///_virtual/claim.ts", ['./rollupPluginModLoBabelHelpers
           return formattedData.join('\n');
         };
 
-        _proto.get_metadata = /*#__PURE__*/function () {
-          var _get_metadata = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-            var obelisk, network, packageId, metadata, obelisk_sdk, tx, params, res1, input, formattedOutput;
+        _proto.get_tx = function get_tx(sui) {
+          var package_id = '0xe2c80e9fdf403fc3591eaa3882fd4534942e90594537acfe60f298e38e0dc877';
+          var TransactionBlock = sui.TransactionBlock;
+          var tx = new TransactionBlock();
+          var system_name = 'pet_system';
+          var function_name = 'adopt_pet';
+          var name = 'yaoshui';
+          var sex = false;
+          var clock = '0x6';
+          var parms = [tx.pure('0xae87cf1803bb186b871b52f43aaed4f00d60836bfc8feb3731e75c888cf53242'), tx.pure(name), tx.pure(sex), tx.pure(clock)];
+          tx.moveCall({
+            target: package_id + "::" + system_name + "::" + function_name,
+            arguments: parms
+          });
+          return tx;
+        };
+
+        _proto.get_nft = /*#__PURE__*/function () {
+          var _get_nft = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+            var sui, decode, base_64_privkey, fromB64, toB64, privkey, keypair, sender, new_tx, Connection, JsonRpcProvider, connection, provider, sender_tx_bytes, tx, data, url, get_transactionBlockBytes, result, sponsored_tx, RawSigner, signer, TransactionBlock, signed, executed;
             return _regeneratorRuntime().wrap(function _callee2$(_context2) {
               while (1) switch (_context2.prev = _context2.next) {
+                case 0:
+                  // @ts-ignore
+                  sui = window.sui;
+                  decode = JSON.parse(sys.localStorage.getItem('withinfinity-userWalletData'));
+                  base_64_privkey = decode.privateKey;
+                  fromB64 = sui.fromB64;
+                  toB64 = sui.toB64;
+                  privkey = fromB64(base_64_privkey); // console.log(privkey);
+
+                  keypair = sui.Ed25519Keypair.fromSecretKey(privkey); // console.log(keypair);
+
+                  sender = keypair.getPublicKey().toSuiAddress();
+                  console.log(sender);
+                  _context2.next = 11;
+                  return this.get_tx(sui);
+
+                case 11:
+                  new_tx = _context2.sent; // console.log(new_tx);
+
+                  Connection = sui.Connection;
+                  JsonRpcProvider = sui.JsonRpcProvider;
+                  connection = new Connection({
+                    fullnode: 'https://fullnode.testnet.sui.io:443/',
+                    faucet: 'https://faucet.testnet.sui.io/gas'
+                  });
+                  provider = new JsonRpcProvider(connection); // move call will check provider
+
+                  _context2.next = 18;
+                  return new_tx.build({
+                    provider: provider,
+                    onlyTransactionKind: true
+                  });
+
+                case 18:
+                  sender_tx_bytes = _context2.sent;
+                  tx = toB64(sender_tx_bytes);
+                  data = {
+                    tx: tx,
+                    sender: sender
+                  };
+                  url = 'https://sponser-back-end-production.up.railway.app/v1/SponsorTransaction/SponsorTransaction';
+                  _context2.next = 24;
+                  return fetch(url, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json' // 其他自定义请求头部
+
+                    },
+                    body: JSON.stringify(data) // 请求体数据
+
+                  });
+
+                case 24:
+                  get_transactionBlockBytes = _context2.sent;
+                  _context2.next = 27;
+                  return get_transactionBlockBytes.json();
+
+                case 27:
+                  result = _context2.sent;
+                  sponsored_tx = JSON.parse(result.res.sponsored_tx); // console.log(sponsored_tx);
+
+                  RawSigner = sui.RawSigner;
+                  signer = new RawSigner(keypair, provider); // sender sign sponsored_tx
+
+                  TransactionBlock = sui.TransactionBlock;
+                  _context2.next = 34;
+                  return signer.signTransactionBlock({
+                    transactionBlock: TransactionBlock.from(sponsored_tx.transactionBlockBytes)
+                  });
+
+                case 34:
+                  signed = _context2.sent;
+                  _context2.next = 37;
+                  return provider.executeTransactionBlock({
+                    transactionBlock: signed.transactionBlockBytes,
+                    signature: [signed.signature, sponsored_tx.signature],
+                    options: {
+                      showEffects: true,
+                      showEvents: true,
+                      showObjectChanges: true
+                    }
+                  });
+
+                case 37:
+                  executed = _context2.sent;
+                  oops.gui.open(UIID.Home);
+                  oops.gui.remove(UIID.Claim);
+                  console.log(executed);
+
+                case 41:
+                case "end":
+                  return _context2.stop();
+              }
+            }, _callee2, this);
+          }));
+
+          function get_nft() {
+            return _get_nft.apply(this, arguments);
+          }
+
+          return get_nft;
+        }();
+
+        _proto.get_metadata = /*#__PURE__*/function () {
+          var _get_metadata = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+            var obelisk, network, packageId, metadata, obelisk_sdk, tx, params, res1, input, formattedOutput;
+            return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+              while (1) switch (_context3.prev = _context3.next) {
                 case 0:
                   // @ts-ignore
                   obelisk = window.obelisk;
                   network = 'testnet';
                   packageId = '0x6afbf113a5872b781a2a0068b95c0d9d0ee89428518fdd65f862c841eab45b82';
-                  _context2.next = 5;
+                  _context3.next = 5;
                   return obelisk.getMetadata(network, packageId);
 
                 case 5:
-                  metadata = _context2.sent;
+                  metadata = _context3.sent;
                   obelisk_sdk = new obelisk.Obelisk({
                     networkType: network,
                     packageId: packageId,
@@ -4978,11 +5104,11 @@ System.register("chunks:///_virtual/claim.ts", ['./rollupPluginModLoBabelHelpers
                   console.log(obelisk_sdk);
                   tx = new obelisk.TransactionBlock();
                   params = [tx.pure('0x6fa43c68221960f942572905f3c198a5bccaa0700506b3b6bd83dd9b007e6324'), tx.pure('0xbf64721f0961a0426ccde6b8d9343e2cb2c26a105a5c33e57074580fd98b2cb1'), tx.pure('0x6')];
-                  _context2.next = 12;
+                  _context3.next = 12;
                   return obelisk_sdk.query.pet_system.get_pet_basic_info(tx, params);
 
                 case 12:
-                  res1 = _context2.sent;
+                  res1 = _context3.sent;
                   input = res1.results[0].returnValues;
                   formattedOutput = this.formatData(input);
                   console.log(formattedOutput);
@@ -4991,9 +5117,9 @@ System.register("chunks:///_virtual/claim.ts", ['./rollupPluginModLoBabelHelpers
 
                 case 19:
                 case "end":
-                  return _context2.stop();
+                  return _context3.stop();
               }
-            }, _callee2, this);
+            }, _callee3, this);
           }));
 
           function get_metadata() {
